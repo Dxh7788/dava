@@ -1,5 +1,6 @@
 package com.lrn.dava;
 
+import com.lrn.dava.builder.Person;
 import com.lrn.dava.instance.Calzone;
 import com.lrn.dava.instance.Nutritions;
 import org.junit.Test;
@@ -19,5 +20,10 @@ public class ApplicationTest {
     @Test
     public void calzoneTest(){
         Calzone calzone = new Calzone.Builder().sauceInside(true).build();
+    }
+    @Test
+    public void personTest(){
+        Person person = new Person.Builder("itdxh").isEmployed(false).sex("male").build();
+        System.out.println(person.toString());
     }
 }
