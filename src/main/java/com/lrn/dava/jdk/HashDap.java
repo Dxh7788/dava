@@ -1,6 +1,5 @@
 package com.lrn.dava.jdk;
 
-import java.util.Objects;
 
 public class HashDap extends AbstractDap {
 
@@ -24,10 +23,6 @@ public class HashDap extends AbstractDap {
 
         public String getValue() {
             return value;
-        }
-        @Override
-        public final int hashCode(){
-            return Objects.hashCode(key)^Objects.hashCode(value);
         }
     }
 }
