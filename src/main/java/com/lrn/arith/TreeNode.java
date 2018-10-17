@@ -98,24 +98,90 @@ public class TreeNode extends Node{
         return root;
     }
 
+    /**
+     * 平衡二叉树的左右二叉树也是平衡二叉树,所以可以采用递归方法
+     * 找到最大执行单元.
+     * 如果执行单左旋或者单右旋时,只需要执行leftRotate和rightRotate.
+     * 如果是另外两种情况就需要找到最大旋转单元
+     * */
+    static TreeNode balancify(TreeNode node){
+        return null;
+    }
+    /**
+     * 左平衡,负责左树的平衡.先进行次级根树的左旋转,然后对根节点进行右旋转
+     * @param root
+     * */
+    public TreeNode leftBalance(TreeNode root){
+        TreeNode sRoot = root.left;
+        sRoot = leftRotate(sRoot);
+        root.left = sRoot;
+        sRoot.parent = root;
+        //对root进行左旋转
+        root = rightRotate(root);
+        return root;
+    }
+    /**
+     * 右平衡,负责右树的平衡,先进行次级根树的右旋转,然后对根节点进行左旋转
+     * @param root
+     * */
+    public TreeNode rightBalance(TreeNode root){
+        TreeNode sRoot = root.right;
+        sRoot = rightRotate(sRoot);
+        root.right = sRoot;
+        sRoot.parent = root;
+        //对root进行左旋转
+        root = leftRotate(root);
+        return root;
+    }
+    /**
+     * 需要进行旋转的最小树,进行右旋转
+     * @param root
+     * */
+    public static TreeNode rightRotate(TreeNode root){
+        TreeNode x = root,xp=root,xl=x.left;
+        if (xl.right!=null){
+            xp.left = xl.right;
+        }
+        xl.right = xp;
+        xp.parent = xl;
+        return xl;
+    }
+    /**
+     * 需要进行旋转的最小树,进行左旋转
+     * @param root
+     * */
+    public static TreeNode leftRotate(TreeNode root){
+        TreeNode x = root, xp = root, xr = x.right;
+        if (xr.left!=null){
+            xp.right = xr.left;
+        }
+        xr.left = xp;
+        xp.parent = xr;
+        return xr;
+    }
     public static void main(String[] sargs) {
-        Integer[] args = new Integer[]{4,60,31,23,8,10,124,77};
+        /*Integer[] args = new Integer[]{4,60,31,23,8,10,124,77};
         TreeNode that = TreeNode.replacementTreeNode(args);
         TreeNode result = TreeNode.treeify(that);
 
-        printTreeNodeView(result);
+        treeNodeView(result);*/
+        Integer[] args = new Integer[]{80,60,90,83,95,93};
+        TreeNode that = TreeNode.replacementTreeNode(args);
+        TreeNode result = TreeNode.treeify(that);
+        result = leftRotate(result);
+        System.out.println(result);
     }
 
-    private static void printTreeNodeView(TreeNode result) {
+    private static void treeNodeView(TreeNode result) {
         TreeNode leftNode = result.left;
         if (leftNode != null){
             System.out.println("root:"+result.value+",left:"+leftNode.value);
-            printTreeNodeView(leftNode);
+            treeNodeView(leftNode);
         }
         TreeNode rightNode = result.right;
         if (rightNode != null){
             System.out.println("root:"+result.value+",right:"+rightNode.value);
-            printTreeNodeView(rightNode);
+            treeNodeView(rightNode);
         }
     }
 }
