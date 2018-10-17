@@ -73,10 +73,10 @@ public class TreeNode extends Node{
                 //遍历root
                 for (TreeNode p = root;;){
                     //加左树
-                    if ((pv = p.value) < value){
+                    if ((pv = p.value) > value){
                         dir = -1;
                     }//加右树
-                    else if (pv > value){
+                    else if (pv < value){
                         dir = 1;
                     }//如果相等则进行其他比较
                     else {
@@ -101,11 +101,21 @@ public class TreeNode extends Node{
     public static void main(String[] sargs) {
         Integer[] args = new Integer[]{4,60,31,23,8,10,124,77};
         TreeNode that = TreeNode.replacementTreeNode(args);
-        //遍历链表
-        for (TreeNode hd = that;hd != null;hd = (TreeNode) hd.next){
-            System.out.println("输出链表元素值为:"+hd.value);
-        }
         TreeNode result = TreeNode.treeify(that);
-        System.out.println(result);
+
+        printTreeNodeView(result);
+    }
+
+    private static void printTreeNodeView(TreeNode result) {
+        TreeNode leftNode = result.left;
+        if (leftNode != null){
+            System.out.println("root:"+result.value+",left:"+leftNode.value);
+            printTreeNodeView(leftNode);
+        }
+        TreeNode rightNode = result.right;
+        if (rightNode != null){
+            System.out.println("root:"+result.value+",right:"+rightNode.value);
+            printTreeNodeView(rightNode);
+        }
     }
 }
