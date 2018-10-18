@@ -159,6 +159,26 @@ public class TreeNode extends Node{
         xp.parent = xr;
         return xr;
     }
+    /**
+     * 计算树的深度
+     * 无论左子树还是右子树只要能走下去就多一层
+     * */
+    public static int deepth(TreeNode root){
+        if (root==null){
+            return 0;
+        }
+        int deepth = 0;
+        if (root.right!=null || root.left!=null){
+            deepth++;
+            int ld = deepth(root.left);
+            int rd = deepth(root.right);
+            deepth= deepth + Math.max(ld,rd);
+        }
+        return deepth;
+    }
+    /**
+     * 20181017 左旋测试通过
+     * */
     public static void main(String[] sargs) {
         /*Integer[] args = new Integer[]{4,60,31,23,8,10,124,77};
         TreeNode that = TreeNode.replacementTreeNode(args);
@@ -169,6 +189,14 @@ public class TreeNode extends Node{
         TreeNode that = TreeNode.replacementTreeNode(args);
         TreeNode result = TreeNode.treeify(that);
         result = leftRotate(result);
+        //右旋测试,测试通过
+        args = new Integer[]{80,60,50,53,65,90};
+        that = TreeNode.replacementTreeNode(args);
+        result = TreeNode.treeify(that);
+        int deepth = deepth(result.right);
+        result = rightRotate(result);
+        //测试树深度方法
+        System.out.println(deepth);
         System.out.println(result);
     }
 
