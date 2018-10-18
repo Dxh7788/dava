@@ -90,6 +90,8 @@ public class TreeNode extends Node{
                         }else {
                             xp.right = x;
                         }
+                        //添加完成后进行平衡
+                        root = balancify(root, x);
                         break;
                     }
                 }
@@ -98,15 +100,6 @@ public class TreeNode extends Node{
         return root;
     }
 
-    /**
-     * 平衡二叉树的左右二叉树也是平衡二叉树,所以可以采用递归方法
-     * 找到最大执行单元.
-     * 如果执行单左旋或者单右旋时,只需要执行leftRotate和rightRotate.
-     * 如果是另外两种情况就需要找到最大旋转单元
-     * */
-    static TreeNode balancify(TreeNode node){
-        return null;
-    }
     /**
      * 左平衡,负责左树的平衡.先进行次级根树的左旋转,然后对根节点进行右旋转
      * @param root
@@ -141,8 +134,8 @@ public class TreeNode extends Node{
         TreeNode x = root,xp=root,xl=x.left;
         if (xl.right!=null){
             xp.left = xl.right;
+            xl.right = xp;
         }
-        xl.right = xp;
         xp.parent = xl;
         return xl;
     }
@@ -154,8 +147,8 @@ public class TreeNode extends Node{
         TreeNode x = root, xp = root, xr = x.right;
         if (xr.left!=null){
             xp.right = xr.left;
+            xr.left = xp;
         }
-        xr.left = xp;
         xp.parent = xr;
         return xr;
     }
@@ -177,18 +170,59 @@ public class TreeNode extends Node{
         return deepth;
     }
     /**
+     * 平衡二叉树的左右二叉树也是平衡二叉树,所以可以采用递归方法
+     * 找到最大执行单元.
+     * 如果执行单左旋或者单右旋时,只需要执行leftRotate和rightRotate.
+     * 如果是另外两种情况就需要找到最大旋转单元
+     * */
+    static TreeNode balancify(TreeNode root,TreeNode xp){
+        //检查root的左右树差
+        if (root == null || xp == null){
+            return null;
+        }
+        int ld = deepth(root.left);
+        int rd = deepth(root.right);
+        //失去平衡
+        if (Math.abs(ld-rd) == 2 ){
+            //确定节点插入性质
+            TreeNode xpp = xp.parent;
+            if (ld > rd){
+                //根节点的左子树添加
+                if (xpp.left == xp){
+                    //单右旋,直接对root操作
+                    return rightRotate(root);
+                }else if (xpp.right == xp){
+                    //先对xpp左旋,再对root右旋
+                    TreeNode xppr = xpp;
+                    TreeNode nRoot = leftRotate(xpp);
+                    xppr.right = nRoot;
+                    return rightRotate(root);
+                }
+            }else {
+                 if (xpp.right == xp){
+                     //单左旋,直接对root操作
+                     return leftRotate(root);
+                 }else if (xpp.left == xp){
+                     //先对xpp右旋,再对root左旋
+                     TreeNode xppl = xpp;
+                     TreeNode nRoot = rightRotate(xpp);
+                     xppl.left = nRoot;
+                     return leftRotate(root);
+                }
+            }
+        }
+        //没有失衡,则直接返回root
+        return root;
+    }
+    /**
      * 20181017 左旋测试通过
      * */
     public static void main(String[] sargs) {
-        /*Integer[] args = new Integer[]{4,60,31,23,8,10,124,77};
-        TreeNode that = TreeNode.replacementTreeNode(args);
-        TreeNode result = TreeNode.treeify(that);
-
-        treeNodeView(result);*/
         Integer[] args = new Integer[]{80,60,90,83,95,93};
         TreeNode that = TreeNode.replacementTreeNode(args);
         TreeNode result = TreeNode.treeify(that);
-        result = leftRotate(result);
+        System.out.println(result.value);
+        /*result = leftRotate(result);
         //右旋测试,测试通过
         args = new Integer[]{80,60,50,53,65,90};
         that = TreeNode.replacementTreeNode(args);
@@ -197,7 +231,7 @@ public class TreeNode extends Node{
         result = rightRotate(result);
         //测试树深度方法
         System.out.println(deepth);
-        System.out.println(result);
+        System.out.println(result.value);*/
     }
 
     private static void treeNodeView(TreeNode result) {
