@@ -2,6 +2,9 @@ package com.lrn.arith;
 
 /*-----------红黑树--------------*/
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author dongxiaohong on 2018/10/16 11:32
  */
@@ -214,36 +217,35 @@ public class TreeNode extends Node{
         //没有失衡,则直接返回root
         return root;
     }
+
     /**
-     * 20181017 左旋测试通过
+     * 前序输出
      * */
+    public static List<Integer> frontView(TreeNode root,List<Integer> values){
+        if (root.left==null && root.right ==null){
+            values.add(root.value);
+            return values;
+        }
+        if ( root.left != null ){
+            frontView(root.left, values);
+        }
+        values.add(root.value);
+        if (root.right != null){
+            frontView(root.right, values);
+        }
+        return values;
+    }
     public static void main(String[] sargs) {
-        Integer[] args = new Integer[]{80,60,90,83,95,93};
+        Integer[] args = new Integer[]{80,60,90,83,95,93,97,100,70};
         TreeNode that = TreeNode.replacementTreeNode(args);
         TreeNode result = TreeNode.treeify(that);
-        System.out.println(result.value);
-        /*result = leftRotate(result);
-        //右旋测试,测试通过
-        args = new Integer[]{80,60,50,53,65,90};
-        that = TreeNode.replacementTreeNode(args);
-        result = TreeNode.treeify(that);
-        int deepth = deepth(result.right);
-        result = rightRotate(result);
-        //测试树深度方法
-        System.out.println(deepth);
-        System.out.println(result.value);*/
-    }
-
-    private static void treeNodeView(TreeNode result) {
-        TreeNode leftNode = result.left;
-        if (leftNode != null){
-            System.out.println("root:"+result.value+",left:"+leftNode.value);
-            treeNodeView(leftNode);
-        }
-        TreeNode rightNode = result.right;
-        if (rightNode != null){
-            System.out.println("root:"+result.value+",right:"+rightNode.value);
-            treeNodeView(rightNode);
+        //前序查询
+        List<Integer> values = new ArrayList<Integer>();
+        frontView(result, values);
+        if (values != null && !values.isEmpty()){
+            for (Integer value : values){
+                System.out.println(value);
+            }
         }
     }
 }
