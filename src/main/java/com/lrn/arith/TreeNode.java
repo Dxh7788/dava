@@ -219,19 +219,53 @@ public class TreeNode extends Node{
     }
 
     /**
-     * 前序输出
+     * 中序输出
      * */
-    public static List<Integer> frontView(TreeNode root,List<Integer> values){
+    public static List<Integer> middle(TreeNode root,List<Integer> values){
         if (root.left==null && root.right ==null){
             values.add(root.value);
             return values;
         }
         if ( root.left != null ){
-            frontView(root.left, values);
+            middle(root.left, values);
         }
         values.add(root.value);
         if (root.right != null){
-            frontView(root.right, values);
+            middle(root.right, values);
+        }
+        return values;
+    }
+    /**
+     * 后序输出
+     * */
+    public static List<Integer> back(TreeNode root,List<Integer> values){
+        if (root.left==null && root.right ==null){
+            values.add(root.value);
+            return values;
+        }
+        if ( root.left != null ){
+            back(root.left, values);
+        }
+        if (root.right != null){
+            back(root.right, values);
+        }
+        values.add(root.value);
+        return values;
+    }
+    /**
+     * 后序输出
+     * */
+    public static List<Integer> front(TreeNode root,List<Integer> values){
+        if (root.left==null && root.right ==null){
+            values.add(root.value);
+            return values;
+        }
+        values.add(root.value);
+        if ( root.left != null ){
+            front(root.left, values);
+        }
+        if (root.right != null){
+            front(root.right, values);
         }
         return values;
     }
@@ -241,10 +275,29 @@ public class TreeNode extends Node{
         TreeNode result = TreeNode.treeify(that);
         //前序查询
         List<Integer> values = new ArrayList<Integer>();
-        frontView(result, values);
+        //前序输出
+        front(result, values);
         if (values != null && !values.isEmpty()){
             for (Integer value : values){
-                System.out.println(value);
+                System.out.print(value+" ");
+            }
+            System.out.println();
+        }
+        //中序输出
+        values.clear();
+        middle(result,values);
+        if (values != null && !values.isEmpty()){
+            for (Integer value : values){
+                System.out.print(value+" ");
+            }
+            System.out.println();
+        }
+        //后序输出
+        values.clear();
+        back(result,values);
+        if (values != null && !values.isEmpty()){
+            for (Integer value : values){
+                System.out.print(value+" ");
             }
         }
     }
